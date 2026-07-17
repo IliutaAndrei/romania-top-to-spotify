@@ -1,0 +1,38 @@
+html {
+    background-color: black;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.spotify-btn {
+    display: inline-block;
+    background-color: #1ED760;
+    color: #000000;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    padding: 14px 32px;
+    border-radius: 500px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+.spotify-btn:hover {
+    background-color: #16db5d;
+    transform: scale(1.04);
+    cursor: pointer;
+}
+
+
+.spotify-btn:active {
+    transform: scale(0.98);
+}
