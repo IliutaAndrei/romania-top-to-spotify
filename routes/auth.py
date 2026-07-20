@@ -1,10 +1,11 @@
+import pprint
+
 from fastapi import APIRouter
 from fastapi.responses import RedirectResponse
 
 from services import spotify_service
-from services.spotify_service import get_authorization_url, exchange_code_for_access_token, \
-    get_current_user_profile
-
+from services.spotify_service import get_authorization_url, exchange_auth_code_for_access_token
+from services.user_service import authenticate_user
 
 router = APIRouter()
 
@@ -17,10 +18,10 @@ async def login():
 
 @router.get("/callback")
 async def callback(code, state):
-    if state == spotify_service.current_state:
-        access_token = exchange_code_for_access_token(code)["access_token"]
-        # profile_data = get_current_user_profile(access_token)
-
-        return RedirectResponse("/dashboard")
-    else:
+    if state != spotify_service.current_state:
         return RedirectResponse("/error")
+
+    profile_data = authenticate_user(code)
+    pprint.pprint(profile_data)
+
+    return RedirectResponse("/dashboard")

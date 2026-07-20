@@ -1,4 +1,6 @@
 beautifulsoup4
 requests
-fastapi
+fastapi[standard]
 python-dotenv
+sqlalchemy
+alembic

@@ -9,15 +9,7 @@ from constans import BASE_AUTH_URL, BASE_TOKEN_URL
 
 current_state = None
 
-def get_current_user_profile(access_token):
-    headers = {
-        "Authorization": f"Bearer ${access_token}"
-    }
-    result = requests.get(BASE_TOKEN_URL, headers=headers)
-
-    return result.json()
-
-def exchange_code_for_access_token(code: str) -> dict:
+def exchange_auth_code_for_access_token(auth_code: str) -> dict:
     credentials = f"{CLIENT_ID}:{CLIENT_SECRET}"
     auth_header = base64.b64encode(credentials.encode("ascii")).decode("ascii")
 
@@ -27,7 +19,7 @@ def exchange_code_for_access_token(code: str) -> dict:
     }
 
     payload = {
-        'code': code,
+        'code': auth_code,
         'redirect_uri': REDIRECT_URI,
         'grant_type': 'authorization_code'
     }
