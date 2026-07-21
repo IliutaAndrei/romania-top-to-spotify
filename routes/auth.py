@@ -1,9 +1,11 @@
+import pprint
+
 from fastapi import APIRouter, Request, Depends
 from fastapi.responses import RedirectResponse
 
 from database.database import get_db
 from services import spotify_service
-from services.spotify_service import get_authorization_url
+from services.spotify_service import get_authorization_url, exchange_auth_code_for_access_token
 from services.user_service import authenticate_user
 
 router = APIRouter()

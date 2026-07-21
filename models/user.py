@@ -14,4 +14,4 @@ class User(Base):
     email: Mapped[str] = mapped_column(unique=True)
     access_token: Mapped[str] = mapped_column()
     refresh_token: Mapped[str] = mapped_column()
-    expires_at: Mapped[datetime] = mapped_column(DateTime)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
