@@ -1,10 +1,30 @@
+import pprint
+
 import requests
 from datetime import datetime, timedelta, timezone
 
+from fastapi import Depends, Request
+
 from constans import BASE_API_URL
-from database.database import SessionLocal
-from repositories.user_repository import save_or_update_user
+from database.database import SessionLocal, get_db
+from models.user import User
+from repositories.user_repository import save_or_update_user, get_user_by_id
 from services.spotify_service import exchange_auth_code_for_access_token
+
+def get_current_user(request: Request, db_session=Depends(get_db)) -> User | None:
+    user_id = request.session.get("user_id")
+
+    pprint.pprint(request.session)
+
+    if not user_id:
+        return None
+
+    current_user = get_user_by_id(user_id=user_id, session=db_session)
+
+    if not current_user:
+        return None
+
+    return current_user
 
 
 def get_current_user_profile(access_token: str) -> dict:
@@ -36,8 +56,8 @@ def authenticate_user(code: str):
 
     session = SessionLocal()
     try:
-        save_or_update_user(user_data, session)
+        db_user = save_or_update_user(user_data, session)
     finally:
         session.close()
 
-    return user_data
+    return db_user

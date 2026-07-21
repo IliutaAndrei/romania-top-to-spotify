@@ -10,3 +10,12 @@ class Base(DeclarativeBase):
 engine = create_engine(DATABASE_URL, echo=True)
 
 SessionLocal = sessionmaker(bind=engine)
+
+def get_db():
+    session = SessionLocal()
+    try:
+        yield session
+    finally:
+        session.close()
+
+

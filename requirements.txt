@@ -4,3 +4,4 @@ fastapi[standard]
 python-dotenv
 sqlalchemy
 alembic
+starlette

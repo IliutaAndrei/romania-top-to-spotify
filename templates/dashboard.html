@@ -2,12 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Profile</title>
+    <title>Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', path='dashboard.css') }}">
 </head>
 <body>
 
 <p>Dashboard</p>
+
+<a class="logout-btn" href="{{ url_for('logout') }}">Logout</a>
 
 </body>
 </html>

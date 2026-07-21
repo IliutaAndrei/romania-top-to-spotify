@@ -1,22 +1,25 @@
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session as DbSession
 
 from models.user import User
 
+def get_user_by_id(user_id, session: DbSession):
+    return session.get(User, user_id)
 
-def save_or_update_user(user_data: dict, session: Session):
+
+def save_or_update_user(user_data: dict, session: DbSession):
     stmt = select(User).where(User.spotify_id == user_data["spotify_id"])
 
-    existing_user = session.scalar(stmt)
+    user = session.scalar(stmt)
 
-    if existing_user:
-        existing_user.display_name = user_data["display_name"]
-        existing_user.email = user_data["email"]
-        existing_user.access_token = user_data["access_token"]
-        existing_user.refresh_token = user_data["refresh_token"]
-        existing_user.expires_at = user_data["expires_at"]
+    if user:
+        user.display_name = user_data["display_name"]
+        user.email = user_data["email"]
+        user.access_token = user_data["access_token"]
+        user.refresh_token = user_data["refresh_token"]
+        user.expires_at = user_data["expires_at"]
     else:
-        db_user = User(
+        user = User(
             spotify_id=user_data["spotify_id"],
             display_name=user_data["display_name"],
             email=user_data["email"],
@@ -24,6 +27,9 @@ def save_or_update_user(user_data: dict, session: Session):
             refresh_token=user_data["refresh_token"],
             expires_at=user_data["expires_at"]
         )
-        session.add(db_user)
+        session.add(user)
 
     session.commit()
+    session.refresh(user)
+
+    return user

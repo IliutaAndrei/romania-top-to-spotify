@@ -1,6 +1,6 @@
 import pprint
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse
 
 from services import spotify_service
@@ -17,11 +17,17 @@ async def login():
 
 
 @router.get("/callback")
-async def callback(code, state):
+async def callback(code, state, request: Request):
     if state != spotify_service.current_state:
         return RedirectResponse("/error")
 
-    profile_data = authenticate_user(code)
-    pprint.pprint(profile_data)
+    db_user = authenticate_user(code)
+    request.session["user_id"] = db_user.id
 
     return RedirectResponse("/dashboard")
+
+@router.get("/logout")
+async def logout(request: Request):
+    request.session.clear()
+
+    return RedirectResponse("/")
