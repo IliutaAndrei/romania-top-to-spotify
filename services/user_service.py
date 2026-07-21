@@ -36,7 +36,7 @@ def get_current_user_profile(access_token: str) -> dict:
     return result.json()
 
 
-def authenticate_user(code: str):
+def authenticate_user(code: str, db_session):
     token_data = exchange_auth_code_for_access_token(code)
     access_token = token_data["access_token"]
 
@@ -54,10 +54,6 @@ def authenticate_user(code: str):
         "expires_at": datetime.now(timezone.utc) + timedelta(seconds=token_data["expires_in"])
     }
 
-    session = SessionLocal()
-    try:
-        db_user = save_or_update_user(user_data, session)
-    finally:
-        session.close()
+    db_user = save_or_update_user(user_data, db_session)
 
     return db_user
