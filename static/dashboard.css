@@ -6,7 +6,8 @@ p {
     color: black;
 }
 
-.logout-btn {
+.logout-btn,
+.spotify-btn {
     display: inline-block;
     background-color: #1ED760;
     color: #000000;
@@ -22,7 +23,8 @@ p {
 }
 
 
-.logout-btn:hover {
+.logout-btn:hover,
+.spotify-btn:hover {
     background-color: #16db5d;
     transform: scale(1.04);
     cursor: pointer;

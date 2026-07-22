@@ -1,36 +1,17 @@
-import pprint
-
 from datetime import datetime, timedelta, timezone
 
 from fastapi import Depends, Request
-from sqlalchemy.orm import Session
 
 from database.database import get_db
 from models.user import User
 from repositories.user_repository import save_or_update_user, get_user_by_id
-from services.spotify_service import exchange_auth_code_for_access_token, refresh_access_token, get_current_user_profile
+from services.spotify_service import exchange_auth_code_for_access_token, get_current_user_profile
 
 
-def get_valid_access_token(user: User, db_session: Session):
-    if is_access_token_expired(user):
-        token_data = refresh_access_token(user.refresh_token)
-        new_access_token = token_data["access_token"]
-        user.access_token = new_access_token
-        user.expires_at = datetime.now(timezone.utc) + timedelta(seconds=token_data["expires_in"])
-
-        db_session.commit()
-
-    return user.access_token
-
-
-def is_access_token_expired(user: User) -> bool:
-    return user.expires_at <= datetime.now(timezone.utc)
 
 
 def get_current_user(request: Request, db_session=Depends(get_db)) -> User | None:
     user_id = request.session.get("user_id")
-
-    pprint.pprint(request.session)
 
     if not user_id:
         return None
@@ -45,7 +26,6 @@ def get_current_user(request: Request, db_session=Depends(get_db)) -> User | Non
 
 def authenticate_user(code: str, db_session):
     token_data = exchange_auth_code_for_access_token(code)
-    pprint.pp(token_data)
     access_token = token_data["access_token"]
 
     if not access_token:

@@ -7,9 +7,16 @@
 </head>
 <body>
 
-<p>Dashboard</p>
+<h1>Welcome, {{ user.display_name }}</h1>
+<p>Email: {{ user.email }}</p>
+<p>Country: {{ user.country }}</p>
+<p>Plan: {{ user.product }}</p>
 
+<a class="spotify-btn" href="{{ user.external_urls.spotify }}" target="_blank" rel="noopener noreferrer">
+    Open Spotify Profile</a>
+<a class="spotify-btn" href="{{ url_for('sync') }}">Sync</a>
 <a class="logout-btn" href="{{ url_for('logout') }}">Logout</a>
+
 
 </body>
 </html>
